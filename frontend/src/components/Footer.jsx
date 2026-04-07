@@ -112,26 +112,26 @@ const Footer = () => {
               Building your dream modular homes with quality, efficiency, and affordability.
             </p>
             <div className="flex gap-3">
-              <a href="https://www.facebook.com/likhahomebuilder/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors" aria-label="Visit our Facebook page">
+              <a href="https://www.facebook.com/likhahomebuilder/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black" aria-label="Visit our Facebook page">
                 <Facebook className="w-4 h-4 text-white" />
               </a>
-              <a href="https://au.pinterest.com/likhahomebuilder/_profile/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors" aria-label="Visit our Pinterest profile">
+              <a href="https://au.pinterest.com/likhahomebuilder/_profile/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black" aria-label="Visit our Pinterest profile">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white" aria-hidden="true">
                   <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.168 0 7.41 2.967 7.41 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.366 18.619 0 12.016 0z" />
                 </svg>
               </a>
-              <a href="https://www.tiktok.com/@likhahomes" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors" aria-label="Visit our TikTok profile">
+              <a href="https://www.tiktok.com/@likhahomes" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black" aria-label="Visit our TikTok profile">
                 <Music className="w-4 h-4 text-white" />
               </a>
-              <a href="https://www.instagram.com/likhahomebuilder/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors" aria-label="Visit our Instagram page">
+              <a href="https://www.instagram.com/likhahomebuilder/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black" aria-label="Visit our Instagram page">
                 <Instagram className="w-4 h-4 text-white" />
               </a>
-              <a href="https://x.com/LikhaHomes" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors" aria-label="Visit our X (Twitter) profile">
+              <a href="https://x.com/LikhaHomes" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black" aria-label="Visit our X (Twitter) profile">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white" aria-hidden="true">
                   <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                 </svg>
               </a>
-              <a href="https://www.youtube.com/@likhahomes" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors" aria-label="Visit our YouTube channel">
+              <a href="https://www.youtube.com/@likhahomes" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-[#C4D600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black" aria-label="Visit our YouTube channel">
                 <Youtube className="w-4 h-4 text-white" />
               </a>
             </div>

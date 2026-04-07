@@ -17,3 +17,7 @@
 ## 2024-05-27 - Missing Loading States on Async Submit Buttons
 **Learning:** Found instances where buttons triggering asynchronous operations (like form submissions or newsletter sign-ups) lacked a clear, active visual indicator (such as a spinning icon) alongside the "Loading..." text. While the button was disabled, the absence of an animated indicator reduces user confidence that the system is actively processing their request, potentially leading to confusion or frustration.
 **Action:** Use a combination of a descriptive text change (e.g., "Sending...") and an animated visual indicator (like the `Loader2` component from `lucide-react` with a spinning animation) on buttons during async operations. This clearly signals system status and provides a better UX.
+
+## 2024-05-28 - Custom Interactive Element Focus States
+**Learning:** When styling custom interactive elements (e.g., icon-only social links using `<a>` tags with background colors and border radii), default browser focus outlines may be removed by global CSS resets or obscured by the element's styling. This makes the elements inaccessible to keyboard users, as they cannot see which element currently has focus.
+**Action:** Always explicitly apply high-contrast focus indicators (e.g., using Tailwind classes like `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black`) to custom interactive elements to guarantee keyboard navigation accessibility.
