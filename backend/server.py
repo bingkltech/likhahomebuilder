@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
@@ -15,8 +16,21 @@ load_dotenv(ROOT_DIR / '.env')
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Initialize database and create indexes
+    from database import init_db
+    logger.info("Initializing database and creating indexes...")
+    await init_db()
+    logger.info("Database initialized.")
+    yield
+    # Shutdown: Close database connection
+    from database import close_db_connection
+    close_db_connection()
+    logger.info("Database connection closed.")
+
 # Create the main app without a prefix
-app = FastAPI(title="Likha Home Builders API", version="1.0.0")
+app = FastAPI(title="Likha Home Builders API", version="1.0.0", lifespan=lifespan)
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -83,8 +97,3 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    from database import close_db_connection
-    close_db_connection()
