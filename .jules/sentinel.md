@@ -16,3 +16,8 @@
 **Vulnerability:** The FastAPI application was missing critical global security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Strict-Transport-Security), leaving it vulnerable to common web attacks like clickjacking and MIME sniffing.
 **Learning:** Security headers are often overlooked in API development because they are historically associated with returning HTML pages. However, they provide important defense-in-depth even for JSON endpoints.
 **Prevention:** Always implement a global middleware to enforce standard HTTP security headers across all endpoints, regardless of content type.
+
+## 2024-05-23 - [Missing Rate Limiting on Sensitive Endpoints]
+**Vulnerability:** The backend endpoints `/api/contact`, `/api/newsletter`, and `/api/purchase` were missing rate limiting. This allowed malicious actors to abuse the endpoints by spamming form submissions, leading to potential Denial of Service (DoS) attacks and filling the database with garbage data.
+**Learning:** Publicly accessible endpoints that accept user input and write to a database must always be protected by rate limiting to prevent abuse.
+**Prevention:** Implement a rate-limiting middleware globally or on specific routes. Ensure proxy environments are handled correctly by using headers like `X-Forwarded-For` to identify the real client IP.

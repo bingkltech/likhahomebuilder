@@ -26,8 +26,13 @@ async def subscribe_newsletter(subscriber_data: NewsletterSubscriberCreate):
         # Atomically find and update or insert (upsert)
         # If the subscriber exists, we ensure is_active is True
         # If it doesn't exist, we insert the new_subscriber data
+        update_data = {
+            "$setOnInsert": {k: v for k, v in new_subscriber.dict().items() if k != "is_active"},
+            "$set": {"is_active": True}
+        }
         existing = await db.newsletter_subscribers.find_one_and_update(
             {"email": subscriber_data.email},
+            update_data,
             {"$setOnInsert": new_subscriber.dict(), "$set": {"is_active": True}},
             upsert=True,
             return_document=ReturnDocument.BEFORE,
