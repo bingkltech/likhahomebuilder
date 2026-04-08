@@ -12,3 +12,8 @@
 **Vulnerability:** The FastAPI application was missing critical global security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Strict-Transport-Security), leaving it vulnerable to common web attacks like clickjacking and MIME sniffing.
 **Learning:** Security headers are often overlooked in API development because they are historically associated with returning HTML pages. However, they provide important defense-in-depth even for JSON endpoints.
 **Prevention:** Always implement a global middleware to enforce standard HTTP security headers across all endpoints, regardless of content type.
+
+## 2025-04-08 - [Missing Anti-Caching Headers for API Endpoints]
+**Vulnerability:** The application did not apply anti-caching headers (Cache-Control: no-store, Pragma: no-cache, Expires: 0) to API responses, allowing sensitive JSON data to potentially be cached by intermediate proxies, CDNs, or local browsers.
+**Learning:** Security middleware often focuses on headers like XSS-Protection and CSP but forgets that JSON responses containing PII must not be cached. This creates a risk of sensitive data exposure on shared computers or misconfigured proxies.
+**Prevention:** Always implement conditional anti-caching headers specifically for API routes (e.g. starting with `/api/`) to protect sensitive data while continuing to allow static asset caching.
