@@ -8,6 +8,10 @@
 **Learning:** Default fallbacks for authentication secrets completely undermine the security of environment variables. It's better for the application to fail to start or explicitly return a server error than to silently use a known, insecure secret.
 **Prevention:** Always raise an explicit error or fail securely if critical security configuration is missing during initialization or execution, rather than providing fallback credentials.
 
+## 2024-05-23 - [Missing HTTP Security Headers]
+**Vulnerability:** The application was missing basic HTTP security headers (`X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Strict-Transport-Security`). This increases the risk of attacks like MIME-sniffing, clickjacking, and cross-site scripting (XSS), and allows for downgrading to HTTP instead of HTTPS.
+**Learning:** Frameworks like FastAPI do not include HTTP security headers out-of-the-box by default. They have to be manually added either via middleware or explicitly on each response, which is often forgotten in initial development.
+**Prevention:** Implement a global middleware early in the development lifecycle to automatically append security headers to all HTTP responses, providing a baseline layer of defense-in-depth across the entire application.
 ## 2024-05-23 - [Missing Global Security Headers]
 **Vulnerability:** The FastAPI application was missing critical global security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Strict-Transport-Security), leaving it vulnerable to common web attacks like clickjacking and MIME sniffing.
 **Learning:** Security headers are often overlooked in API development because they are historically associated with returning HTML pages. However, they provide important defense-in-depth even for JSON endpoints.
