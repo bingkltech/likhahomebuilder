@@ -12,8 +12,22 @@ from routes import contact, newsletter, purchase
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+
 # Create the main app without a prefix
 app = FastAPI(title="Likha Home Builders API", version="1.0.0")
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
