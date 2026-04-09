@@ -4,15 +4,15 @@ import { Home, Phone, Mail, Menu, X, Facebook, Instagram, Music, Youtube } from 
 import { Button } from '../components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../components/ui/sheet';
 
-const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-
-  const navLinks = [
+const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
+
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
 
