@@ -242,33 +242,48 @@ const ImageCarousel = React.memo(({ images }) => {
             cursor: isDragging ? 'grabbing' : 'grab'
           }}
         >
-          {images.map((img, i) => (
-            <div
-              key={i}
-              className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden border border-white/10"
-              style={getImageStyles(i)}
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseMove={(e) => handleFrameMouseMove(e, i)}
-              onMouseLeave={() => {
-                setHoveredIndex(null);
-                setMouseY(0);
-              }}
-              onClick={() => {
-                const diff = (i - currentIndex + imagesCount) % imagesCount;
-                const distance = diff > imagesCount / 2 ? diff - imagesCount : diff;
+          {images.map((img, i) => {
+            const diff = (i - currentIndex + imagesCount) % imagesCount;
+            const distance = diff > imagesCount / 2 ? diff - imagesCount : diff;
+            const absDistance = Math.abs(distance);
 
-                // If already centered, open lightbox
-                if (distance === 0) {
-                  setLightboxIndex(i);
-                  setLightboxOpen(true);
-                } else {
-                  // If not centered, move to this image first
-                  setTransitionDuration(500);
-                  setCurrentIndex(i);
-                }
-              }}
-            >
-              <img
+            return (
+              <div
+                key={i}
+                className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4D600] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                style={getImageStyles(i)}
+                role="button"
+                tabIndex={absDistance <= 2 ? 0 : -1}
+                aria-label={distance === 0 ? `View Project ${i + 1} full screen` : `Bring Project ${i + 1} to center`}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseMove={(e) => handleFrameMouseMove(e, i)}
+                onMouseLeave={() => {
+                  setHoveredIndex(null);
+                  setMouseY(0);
+                }}
+                onClick={() => {
+                  if (distance === 0) {
+                    setLightboxIndex(i);
+                    setLightboxOpen(true);
+                  } else {
+                    setTransitionDuration(500);
+                    setCurrentIndex(i);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (distance === 0) {
+                      setLightboxIndex(i);
+                      setLightboxOpen(true);
+                    } else {
+                      setTransitionDuration(500);
+                      setCurrentIndex(i);
+                    }
+                  }
+                }}
+              >
+                <img
                 src={img}
                 alt={`Project ${i + 1}`}
                 className="w-full h-full object-cover select-none pointer-events-none"
@@ -277,8 +292,9 @@ const ImageCarousel = React.memo(({ images }) => {
                 fetchpriority={i === currentIndex ? "high" : "auto"}
                 onError={handleImageError}
               />
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
 
         {/* Modern Controls */}
