@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
@@ -243,8 +243,17 @@ const ContactPage = () => {
                     className="w-full py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105"
                     style={{ backgroundColor: '#C4D600', color: '#000' }}
                   >
-                    <Send className="mr-2 h-5 w-5" />
-                    {loading ? 'Sending...' : 'Send Message'}
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-5 w-5" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>

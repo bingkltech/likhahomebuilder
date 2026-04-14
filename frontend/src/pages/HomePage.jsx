@@ -20,7 +20,12 @@ import { useToast } from '../hooks/use-toast';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-const ImageCarousel = ({ images }) => {
+// ⚡ Bolt Performance Optimization:
+// Wrap the ImageCarousel in React.memo() to avoid unnecessary re-renders when the parent
+// HomePage component state changes. This is critical because ImageCarousel handles
+// complex 3D transitions, drag tracking, and lighting calculations that should not be
+// interrupted or recalculated due to unrelated state changes.
+const ImageCarousel = React.memo(({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -373,7 +378,7 @@ const ImageCarousel = ({ images }) => {
       </Dialog>
     </>
   );
-};
+});
 
 const HomePage = () => {
   const [loading, setLoading] = useState(false);

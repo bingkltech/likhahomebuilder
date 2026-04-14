@@ -1,3 +1,10 @@
+from fastapi import FastAPI, APIRouter, Request
+from fastapi.staticfiles import StaticFiles
+from dotenv import load_dotenv
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+import os
 import logging
 import os
 from pathlib import Path
@@ -12,8 +19,67 @@ from starlette.middleware.cors import CORSMiddleware
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+
 # Create the main app without a prefix
 app = FastAPI(title="Likha Home Builders API", version="1.0.0")
+
+from collections import defaultdict
+import time
+from fastapi.responses import JSONResponse
+
+# Simple rate limit: 5 requests per minute per IP for sensitive POST endpoints
+RATE_LIMIT = 5
+RATE_LIMIT_PERIOD = 60
+ip_tracker = defaultdict(list)
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.method == "POST" and request.url.path in ["/api/contact", "/api/newsletter", "/api/purchase"]:
+            # Prevent IP spoofing by ignoring x-forwarded-for unless configured behind a known trusted proxy.
+            # Using the actual connection IP is safer for basic rate limiting.
+            client_ip = request.client.host if request.client else "unknown"
+
+            current_time = time.time()
+
+            # Clean up old timestamps for this IP
+            ip_tracker[client_ip] = [t for t in ip_tracker.get(client_ip, []) if current_time - t < RATE_LIMIT_PERIOD]
+
+            if len(ip_tracker[client_ip]) >= RATE_LIMIT:
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Too many requests. Please try again later."}
+                )
+
+            ip_tracker[client_ip].append(current_time)
+
+            # Periodically clean up empty IP entries to prevent memory leaks from many unique IPs
+            # Only do this occasionally to avoid performance hits on every request
+            if len(ip_tracker) > 1000:
+                keys_to_delete = []
+                for ip, timestamps in ip_tracker.items():
+                    # Filter out old timestamps for all IPs
+                    ip_tracker[ip] = [t for t in timestamps if current_time - t < RATE_LIMIT_PERIOD]
+                    if not ip_tracker[ip]:
+                        keys_to_delete.append(ip)
+                for key in keys_to_delete:
+                    del ip_tracker[key]
+
+        return await call_next(request)
+
+app.add_middleware(RateLimitMiddleware)
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -73,22 +139,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;"
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 🛡️ Sentinel: Add security headers to all responses
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Strict-Transport-Security"] = (
+        "max-age=31536000; includeSubDomains"
+    )
+    return response
+
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-
-
-@app.on_event("startup")
-async def startup_event():
-    """
-    Performance Boost: Initialize database indexes on startup to ensure efficient
-    query performance and prevent O(n) collection scans.
-    """
-    from database import init_db
-
-    await init_db()
 
 
 @app.on_event("shutdown")
