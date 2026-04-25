@@ -21,3 +21,7 @@
 **Vulnerability:** The backend endpoints `/api/contact`, `/api/newsletter`, and `/api/purchase` were missing rate limiting. This allowed malicious actors to abuse the endpoints by spamming form submissions, leading to potential Denial of Service (DoS) attacks and filling the database with garbage data.
 **Learning:** Publicly accessible endpoints that accept user input and write to a database must always be protected by rate limiting to prevent abuse.
 **Prevention:** Implement a rate-limiting middleware globally or on specific routes. Ensure proxy environments are handled correctly by using headers like `X-Forwarded-For` to identify the real client IP.
+## 2026-04-09 - Add Anti-Caching Headers for API Routes
+**Vulnerability:** Missing anti-caching headers on sensitive API routes (like contact and newsletter submissions).
+**Learning:** Browsers and proxy servers can cache sensitive user information if caching is not explicitly disabled on API routes.
+**Prevention:** Apply `Cache-Control: no-store, no-cache, must-revalidate`, `Pragma: no-cache`, and `Expires: 0` headers to all endpoints managing sensitive data (e.g., matching `/api/`).
